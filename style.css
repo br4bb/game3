@@ -7,16 +7,25 @@
   -webkit-user-select: none;
 }
 
+html {
+  height: 100%;
+  height: -webkit-fill-available;
+}
+
 body {
   background-color: #121810; /* Dark forest green/black */
   background-image: radial-gradient(circle, #253d20 0%, #0c120a 100%);
   color: #f5f6f5;
   font-family: 'Outfit', sans-serif;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  -webkit-touch-callout: none;
 }
 
 /* Global utility classes */
@@ -77,6 +86,48 @@ body {
     height: 53.43vw; /* 95 * 9 / 16 */
     max-width: 960px;
     max-height: 540px;
+  }
+}
+
+/* PWA standalone / Add to Home Screen — fullscreen tanpa UI browser */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  body {
+    padding: 0;
+    background-image: none;
+    background-color: #000;
+  }
+
+  #game-container {
+    width: 100vw;
+    width: 100dvw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+    aspect-ratio: auto;
+  }
+}
+
+/* iOS Safari standalone (navigator.standalone) */
+@supports (-webkit-touch-callout: none) {
+  body.ios-standalone {
+    padding: 0;
+    background-image: none;
+    background-color: #000;
+  }
+
+  body.ios-standalone #game-container {
+    width: 100vw;
+    width: 100dvw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+    aspect-ratio: auto;
   }
 }
 
@@ -434,9 +485,9 @@ body {
 /* Mobile Controls */
 .mobile-controls-overlay {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  left: calc(20px + env(safe-area-inset-left, 0px));
+  right: calc(20px + env(safe-area-inset-right, 0px));
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -561,4 +612,42 @@ body {
 
 .btn-action-restart-game:active {
   transform: translateY(1px) scale(0.98);
+}
+
+/* iOS install hint banner */
+.ios-install-hint {
+  position: fixed;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  left: calc(12px + env(safe-area-inset-left, 0px));
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(18, 24, 16, 0.95);
+  border: 1px solid rgba(118, 232, 100, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.ios-install-hint p {
+  flex: 1;
+  margin: 0;
+}
+
+.ios-install-hint button {
+  background: none;
+  border: none;
+  color: #a8b0a6;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.ios-install-hint strong {
+  color: #76e864;
 }

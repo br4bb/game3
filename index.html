@@ -2,27 +2,22 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function (regs) {
-        regs.forEach(function (reg) { reg.unregister(); });
-      });
-      if (window.caches) {
-        caches.keys().then(function (keys) {
-          keys.forEach(function (key) { caches.delete(key); });
-        });
-      }
-    }
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Farm Rush – Escape the Coop</title>
   <!-- SEO Meta Tags -->
   <meta name="description" content="Bantu si telur hidup melarikan diri dari peternakan sebelum berakhir menjadi sarapan di game platformer 2D yang menantang: Farm Rush - Escape the Coop!">
   <meta name="keywords" content="game, platformer, html5, canvas, javascript, game telur, farm rush">
   <meta name="author" content="Antigravity AI">
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#52733b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Farm Rush">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192x192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -195,7 +190,35 @@
 
   </div>
 
-  <!-- JavaScript file -->
+  <!-- Petunjuk instalasi PWA untuk iOS (hanya tampil di Safari, bukan mode standalone) -->
+  <div id="ios-install-hint" class="ios-install-hint hidden">
+    <p class="font-ui">Untuk fullscreen di iPhone: tap <strong>Share</strong> → <strong>Add to Home Screen</strong>, lalu buka dari icon di Home Screen.</p>
+    <button id="ios-install-dismiss" type="button" aria-label="Tutup">✕</button>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+      });
+    }
+
+    (function () {
+      var hint = document.getElementById('ios-install-hint');
+      var dismiss = document.getElementById('ios-install-dismiss');
+      var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      if (isStandalone) {
+        document.body.classList.add('ios-standalone');
+      }
+      if (hint && isIOS && !isStandalone) {
+        hint.classList.remove('hidden');
+      }
+      if (dismiss && hint) {
+        dismiss.addEventListener('click', function () { hint.classList.add('hidden'); });
+      }
+    })();
+  </script>
   <script src="game.js"></script>
 </body>
 </html>

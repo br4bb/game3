@@ -1,0 +1,31 @@
+﻿{
+  "name": "Farm Rush – Escape the Coop",
+  "short_name": "Farm Rush",
+  "description": "Bantu si telur hidup melarikan diri dari peternakan dalam game platformer 2D.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#121810",
+  "theme_color": "#52733b",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
