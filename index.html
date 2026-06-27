@@ -3,6 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (regs) {
+        regs.forEach(function (reg) { reg.unregister(); });
+      });
+      if (window.caches) {
+        caches.keys().then(function (keys) {
+          keys.forEach(function (key) { caches.delete(key); });
+        });
+      }
+    }
+  </script>
   <title>Farm Rush – Escape the Coop</title>
   <!-- SEO Meta Tags -->
   <meta name="description" content="Bantu si telur hidup melarikan diri dari peternakan sebelum berakhir menjadi sarapan di game platformer 2D yang menantang: Farm Rush - Escape the Coop!">
