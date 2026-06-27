@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farm Rush – Escape the Coop</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Bantu si telur hidup melarikan diri dari peternakan sebelum berakhir menjadi sarapan di game platformer 2D yang menantang: Farm Rush - Escape the Coop!">
+  <meta name="keywords" content="game, platformer, html5, canvas, javascript, game telur, farm rush">
+  <meta name="author" content="Antigravity AI">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Titan+One&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Game Container -->
+  <div id="game-container">
+    
+    <!-- Canvas for rendering the game -->
+    <canvas id="game-canvas" width="960" height="540"></canvas>
+    
+    <!-- Screen Overlay: Loading Screen -->
+    <div id="loading-screen" class="screen-overlay">
+      <div class="card glassmorphism text-center">
+        <h1 class="font-game title-loading">MEMUAT GAME...</h1>
+        <div class="loader-container">
+          <div id="loader-bar" style="width: 0%;"></div>
+        </div>
+        <p id="loader-text" class="font-ui text-muted">Mempersiapkan petualangan si Telur...</p>
+      </div>
+    </div>
+
+    <!-- Screen Overlay: Start/Main Menu Screen -->
+    <div id="start-screen" class="screen-overlay hidden">
+      <div class="card glassmorphism main-menu-card text-center">
+        <div class="logo-wrapper">
+          <img src="asset/logo_game1.png" alt="Farm Rush Logo" id="game-logo" class="bounce-anim">
+        </div>
+        
+        <div class="menu-content">
+          <!-- Level Selection -->
+          <div class="level-select-container">
+            <h3 class="font-ui section-title">PILIH LEVEL</h3>
+            <div class="level-buttons">
+              <button id="btn-level-1" class="btn btn-level active" data-level="1">
+                <span class="lvl-num">01</span>
+                <span class="lvl-name">Ladang Pagi</span>
+              </button>
+              <button id="btn-level-2" class="btn btn-level locked" data-level="2" disabled>
+                <span class="lvl-num">02</span>
+                <span class="lvl-name">Kandang Ayam Chaos</span>
+                <span class="lock-icon">🔒</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Play Button -->
+          <div class="action-buttons">
+            <button id="btn-play" class="btn btn-action-play">
+              <img src="asset/play1.png" alt="Main" class="btn-img">
+            </button>
+          </div>
+          
+          <!-- Instructions -->
+          <div class="instructions-card text-left">
+            <h4 class="font-ui font-bold">CARA BERMAIN:</h4>
+            <ul class="font-ui">
+              <li>Gerak Kiri/Kanan: <span class="key">A</span> / <span class="key">D</span> atau <span class="key">←</span> / <span class="key">→</span></li>
+              <li>Lompat: <span class="key">W</span>, <span class="key">Space</span>, atau <span class="key">↑</span></li>
+              <li>Kalahkan musuh dengan cara melompat dan menginjak kepalanya!</li>
+              <li>Hati-hati, menyentuh musuh dari samping/bawah atau jatuh ke jurang akan langsung memecahkan telur! (1 Nyawa)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Game HUD Overlay (Active during gameplay) -->
+    <div id="game-hud" class="hud-overlay hidden">
+      <div class="hud-left">
+        <div class="hud-item bg-glass">
+          <img src="asset/gandum1.png" alt="Gandum" class="hud-icon">
+          <span id="hud-score" class="font-game">0000</span>
+        </div>
+        <div class="hud-item bg-glass">
+          <img src="asset/telur1.png" alt="Telur Emas" class="hud-icon egg-icon">
+          <span id="hud-eggs" class="font-game">0/3</span>
+        </div>
+        <div class="hud-item bg-glass">
+          <img src="asset/hati1.png" alt="Nyawa" class="hud-icon heart-icon">
+          <span id="hud-lives" class="font-game">3</span>
+        </div>
+      </div>
+      <div class="hud-center bg-glass">
+        <span id="hud-level-name" class="font-ui font-bold">LEVEL 1: LADANG PAGI</span>
+      </div>
+      <div class="hud-right">
+        <button id="btn-hud-restart" class="btn btn-hud" title="Restart Level (R)">
+          <img src="asset/restart1.png" alt="Restart" class="hud-btn-img">
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile Controls Overlay -->
+    <div id="mobile-controls" class="mobile-controls-overlay hidden">
+      <div class="control-group-left">
+        <button id="ctrl-left" class="ctrl-btn" aria-label="Gerak Kiri">
+          <img src="asset/panah_kiri1.png" alt="Kiri">
+        </button>
+        <button id="ctrl-right" class="ctrl-btn" aria-label="Gerak Kanan">
+          <img src="asset/panah_kanan1.png" alt="Kanan">
+        </button>
+      </div>
+      <div class="control-group-right">
+        <button id="ctrl-jump" class="ctrl-btn jump-btn" aria-label="Lompat">
+          <img src="asset/panah_lompat1.png" alt="Lompat">
+        </button>
+      </div>
+    </div>
+    
+    <!-- Screen Overlay: Game Over Screen -->
+    <div id="game-over-screen" class="screen-overlay hidden">
+      <div class="card glassmorphism game-over-card text-center">
+        <img src="asset/game_over1.png" alt="Game Over" class="game-over-title-img">
+        <h2 class="font-game text-danger text-shadow mt-4">TELUR PECAH!</h2>
+        <div class="stats-panel font-ui mt-3">
+          <p>Skor Anda: <span id="game-over-score" class="stat-highlight">0</span></p>
+          <p>Gandum Dikumpulkan: <span id="game-over-wheat" class="stat-highlight">0</span></p>
+          <p>Telur Diselamatkan: <span id="game-over-eggs" class="stat-highlight">0/0</span></p>
+        </div>
+        <div class="mt-4">
+          <button id="btn-retry" class="btn btn-action-retry">
+            <img src="asset/retry1.png" alt="Coba Lagi" class="btn-img">
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Screen Overlay: Level Clear Screen -->
+    <div id="level-clear-screen" class="screen-overlay hidden">
+      <div class="card glassmorphism level-clear-card text-center">
+        <h1 class="font-game text-success text-shadow">LEVEL SELESAI!</h1>
+        <p class="font-ui subtitle">Si Telur berhasil melewati rintangan!</p>
+        <div class="stats-panel font-ui mt-3">
+          <p>Skor Level: <span id="clear-score" class="stat-highlight">0</span></p>
+          <p>Bonus Gandum: <span id="clear-wheat" class="stat-highlight">0</span></p>
+          <p>Telur Diselamatkan: <span id="clear-eggs" class="stat-highlight">0/0</span></p>
+        </div>
+        <div class="mt-4">
+          <button id="btn-next-level" class="btn btn-action-next">
+            <img src="asset/next_level1.png" alt="Level Berikutnya" class="btn-img">
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Screen Overlay: Win Screen -->
+    <div id="win-screen" class="screen-overlay hidden">
+      <div class="card glassmorphism win-card text-center">
+        <img src="asset/win_srceen1.png" alt="You Win!" class="win-title-img">
+        <h2 class="font-game text-gold text-shadow mt-4">BERHASIL MELARIKAN DIRI!</h2>
+        <p class="font-ui font-bold">Si Telur selamat dari peternakan dan terbebas!</p>
+        <div class="stats-panel font-ui mt-3">
+          <p>Total Skor Akhir: <span id="win-score" class="stat-highlight">0</span></p>
+          <p>Total Telur Diselamatkan: <span id="win-eggs" class="stat-highlight">0/0</span></p>
+        </div>
+        <div class="mt-4">
+          <button id="btn-win-restart" class="btn btn-action-restart-game">
+            <span class="font-game">MAIN LAGI</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="game.js"></script>
+</body>
+</html>

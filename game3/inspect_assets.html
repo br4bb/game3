@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: white;
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .card img {
+      max-width: 120px;
+      max-height: 120px;
+      background: #000; /* to see transparency */
+      display: block;
+      margin: 0 auto 10px;
+      border: 1px dashed #666;
+    }
+    .card span {
+      font-size: 12px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h1>Game Asset Inspector</h1>
+  <div class="grid" id="grid"></div>
+  <script>
+    const assets = [
+      'grass1.png', 'grass2.png', 'grass3.png', 'grass4.png', 'grass5.png', 'grass6.png', 'grass7.png',
+      'dritmiddle1.png', 'dritmiddle2.png', 'dritmiddle3.png', 'dritmiddle4.png', 'dritmiddle5.png', 'dritmiddle6.png', 'dritmiddle7.png',
+      'dirtbottom1.png', 'dirtbottom2.png', 'dirtbottom3.png', 'dirtbottom4.png', 'dirtbottom5.png',
+      'papankayu1.png', 'papankayu2.png', 'papankayu3.png', 'papankayu4.png', 'papankayu5.png',
+      'tiangkayu1.png', 'tiangkayu2.png', 'tiangkayu3.png', 'tiangkayu4.png', 'tiangkayu5.png',
+      'jerami1.png', 'jerami2.png', 'jerami3.png', 'jerami4.png', 'jeramipanjang1.png',
+      'tali1.png', 'tali2.png', 'tali3.png', 'tali4.png', 'lubang1.png', 'lubang2.png', 'lubang3.png', 'lubang4.png'
+    ];
+    const container = document.getElementById('grid');
+    assets.forEach(asset => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const img = document.createElement('img');
+      img.src = 'asset/' + asset;
+      const span = document.createElement('span');
+      span.textContent = asset;
+      card.appendChild(img);
+      card.appendChild(span);
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
